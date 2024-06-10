@@ -131,14 +131,25 @@
 
         // Handle orientation changes to ensure the video remains responsive
         window.addEventListener('orientationchange', () => {
-            if (window.orientation === 90 || window.orientation === -90) {
-                videoContainer.style.width = '100vw';
-                videoContainer.style.height = '100vh';
-            } else {
-                videoContainer.style.width = '100vw';
-                videoContainer.style.height = '100vh';
-            }
+            adjustVideoSize();
         });
+
+        // Adjust video size to maintain aspect ratio
+        function adjustVideoSize() {
+            const aspectRatio = 16 / 9;
+            const windowHeight = window.innerHeight;
+            const windowWidth = window.innerWidth;
+            if (windowWidth / windowHeight > aspectRatio) {
+                iframe.style.width = windowHeight * aspectRatio + 'px';
+                iframe.style.height = windowHeight + 'px';
+            } else {
+                iframe.style.width = windowWidth + 'px';
+                iframe.style.height = windowWidth / aspectRatio + 'px';
+            }
+        }
+
+        // Initial adjustment
+        adjustVideoSize();
     </script>
 </body>
 </html>
