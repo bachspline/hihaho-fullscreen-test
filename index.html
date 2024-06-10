@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hihaho Full Screen Test</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        #video-container {
+            position: relative !important;
+            padding-bottom: 56.25% !important;
+            height: 0px !important;
+            overflow: hidden !important;
+            max-width: 100% !important;
+        }
+        iframe {
+            position: absolute !important;
+            top: 0px !important;
+            left: 0px !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <iframe id="hihaho-video" src="https://player.hihaho.com/embed/1958525c-ab0e-48b4-a785-d387b6247ced?api=true" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
+    </div>
+    <script>
+        function enterFullScreen() {
+            const videoContainer = document.getElementById('video-container');
+            videoContainer.style.position = 'fixed';
+            videoContainer.style.top = '0';
+            videoContainer.style.left = '0';
+            videoContainer.style.width = '100vw';
+            videoContainer.style.height = '100vh';
+            videoContainer.style.zIndex = '9999';
+            videoContainer.style.backgroundColor = '#000';
+        }
+
+        function exitFullScreen() {
+            const videoContainer = document.getElementById('video-container');
+            videoContainer.style.position = 'relative';
+            videoContainer.style.width = '';
+            videoContainer.style.height = '';
+            videoContainer.style.zIndex = '';
+            videoContainer.style.backgroundColor = '';
+        }
+
+        window.addEventListener('message', (event) => {
+            const data = event.data;
+
+            if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_ready') {
+                if (!data.triggerData.supportsFullscreen) {
+                    const iframe = document.getElementById('hihaho-video');
+                    iframe.contentWindow.postMessage({ type: 'api_fullscreen_event' }, '*');
+                }
+            } else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_enter_fullscreen') {
+                enterFullScreen();
+            } else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_exit_fullscreen') {
+                exitFullScreen();
+            }
+        }, false);
+    </script>
+</body>
+</html>
