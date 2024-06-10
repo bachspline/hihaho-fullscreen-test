@@ -32,6 +32,7 @@
         <iframe id="hihaho-video" src="https://player.hihaho.com/embed/1958525c-ab0e-48b4-a785-d387b6247ced?api=true" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
     </div>
     <script>
+        // Function to simulate entering full screen
         function enterFullScreen() {
             const videoContainer = document.getElementById('video-container');
             videoContainer.style.position = 'fixed';
@@ -43,26 +44,35 @@
             videoContainer.style.backgroundColor = '#000';
         }
 
+        // Function to simulate exiting full screen
         function exitFullScreen() {
             const videoContainer = document.getElementById('video-container');
             videoContainer.style.position = 'relative';
+            videoContainer.style.paddingBottom = '56.25%';
+            videoContainer.style.height = '0px';
             videoContainer.style.width = '';
-            videoContainer.style.height = '';
             videoContainer.style.zIndex = '';
             videoContainer.style.backgroundColor = '';
         }
 
+        // Event listener for messages from the iframe
         window.addEventListener('message', (event) => {
             const data = event.data;
 
+            // Check if the hihaho player is ready
             if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_ready') {
                 if (!data.triggerData.supportsFullscreen) {
+                    // Send a message to enable custom fullscreen handling
                     const iframe = document.getElementById('hihaho-video');
                     iframe.contentWindow.postMessage({ type: 'api_fullscreen_event' }, '*');
                 }
-            } else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_enter_fullscreen') {
+            }
+            // Check for enter fullscreen event
+            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_enter_fullscreen') {
                 enterFullScreen();
-            } else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_exit_fullscreen') {
+            }
+            // Check for exit fullscreen event
+            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_exit_fullscreen') {
                 exitFullScreen();
             }
         }, false);
