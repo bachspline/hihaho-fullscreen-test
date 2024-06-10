@@ -18,13 +18,35 @@
             width: 100%;
             height: 100%;
         }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
+    <button class="close-btn" onclick="closeWindow()">X</button>
     <iframe 
         src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" 
         frameborder="0" 
         allowfullscreen>
     </iframe>
+
+    <script>
+        function closeWindow() {
+            window.close();
+        }
+    </script>
 </body>
 </html>
