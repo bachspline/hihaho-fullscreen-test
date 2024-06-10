@@ -10,13 +10,18 @@
             padding: 0;
             overflow: hidden;
             background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         #video-container {
             position: relative !important;
+            width: 100% !important;
+            max-width: 100% !important;
             padding-bottom: 56.25% !important;
             height: 0px !important;
             overflow: hidden !important;
-            max-width: 100% !important;
         }
         iframe {
             position: absolute !important;
@@ -25,16 +30,43 @@
             width: 100% !important;
             height: 100% !important;
         }
+        .control-bar-component {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10000;
+        }
+        .fullscreen-button {
+            background-color: #444;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div id="video-container">
         <iframe id="hihaho-video" src="https://player.hihaho.com/embed/1958525c-ab0e-48b4-a785-d387b6247ced?api=true" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
     </div>
+    
+    <!-- Fullscreen -->
+    <div class="control-bar-component">
+        <button aria-label="Pantalla completa"
+                class="fullscreen-button"
+                id="screenSizeButton">
+            Pantalla completa
+        </button>
+    </div>
+
     <script>
+        const videoContainer = document.getElementById('video-container');
+        const iframe = document.getElementById('hihaho-video');
+        const fullscreenButton = document.getElementById('screenSizeButton');
+
         // Function to simulate entering full screen
         function enterFullScreen() {
-            const videoContainer = document.getElementById('video-container');
             videoContainer.style.position = 'fixed';
             videoContainer.style.top = '0';
             videoContainer.style.left = '0';
@@ -42,18 +74,30 @@
             videoContainer.style.height = '100vh';
             videoContainer.style.zIndex = '9999';
             videoContainer.style.backgroundColor = '#000';
+            videoContainer.style.display = 'flex';
+            videoContainer.style.justifyContent = 'center';
+            videoContainer.style.alignItems = 'center';
         }
 
         // Function to simulate exiting full screen
         function exitFullScreen() {
-            const videoContainer = document.getElementById('video-container');
             videoContainer.style.position = 'relative';
+            videoContainer.style.width = '100%';
             videoContainer.style.paddingBottom = '56.25%';
             videoContainer.style.height = '0px';
-            videoContainer.style.width = '';
             videoContainer.style.zIndex = '';
             videoContainer.style.backgroundColor = '';
+            videoContainer.style.display = 'block';
         }
+
+        // Event listener for fullscreen button click
+        fullscreenButton.addEventListener('click', () => {
+            if (videoContainer.style.position === 'fixed') {
+                exitFullScreen();
+            } else {
+                enterFullScreen();
+            }
+        });
 
         // Event listener for messages from the iframe
         window.addEventListener('message', (event) => {
@@ -63,7 +107,6 @@
             if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_ready') {
                 if (!data.triggerData.supportsFullscreen) {
                     // Send a message to enable custom fullscreen handling
-                    const iframe = document.getElementById('hihaho-video');
                     iframe.contentWindow.postMessage({ type: 'api_fullscreen_event' }, '*');
                 }
             }
