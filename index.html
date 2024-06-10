@@ -1,124 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hihaho Full Screen Test</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        #video-container {
-            position: relative !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            padding-bottom: 56.25% !important;
-            height: 0px !important;
-            overflow: hidden !important;
-        }
-        iframe {
-            position: absolute !important;
-            top: 0px !important;
-            left: 0px !important;
-            width: 100% !important;
-            height: 100% !important;
-        }
-        .control-bar-component {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            z-index: 10000;
-        }
-        .fullscreen-button {
-            background-color: #444;
-            border: none;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
+    <title>動画埋め込み</title>
 </head>
 <body>
-    <div id="video-container">
-        <iframe id="hihaho-video" src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
-    </div>
-    
-    <!-- Fullscreen -->
-    <div class="control-bar-component">
-        <button aria-label="Pantalla completa"
-                class="fullscreen-button"
-                id="screenSizeButton">
-            Pantalla completa
-        </button>
-    </div>
-
-    <script>
-        const videoContainer = document.getElementById('video-container');
-        const iframe = document.getElementById('hihaho-video');
-        const fullscreenButton = document.getElementById('screenSizeButton');
-
-        // Function to simulate entering full screen
-        function enterFullScreen() {
-            videoContainer.style.position = 'fixed';
-            videoContainer.style.top = '0';
-            videoContainer.style.left = '0';
-            videoContainer.style.width = '100vw';
-            videoContainer.style.height = '100vh';
-            videoContainer.style.zIndex = '9999';
-            videoContainer.style.backgroundColor = '#000';
-            videoContainer.style.display = 'flex';
-            videoContainer.style.justifyContent = 'center';
-            videoContainer.style.alignItems = 'center';
-        }
-
-        // Function to simulate exiting full screen
-        function exitFullScreen() {
-            videoContainer.style.position = 'relative';
-            videoContainer.style.width = '100%';
-            videoContainer.style.paddingBottom = '56.25%';
-            videoContainer.style.height = '0px';
-            videoContainer.style.zIndex = '';
-            videoContainer.style.backgroundColor = '';
-            videoContainer.style.display = 'block';
-        }
-
-        // Event listener for fullscreen button click
-        fullscreenButton.addEventListener('click', () => {
-            if (videoContainer.style.position === 'fixed') {
-                exitFullScreen();
-            } else {
-                enterFullScreen();
-            }
-        });
-
-        // Event listener for messages from the iframe
-        window.addEventListener('message', (event) => {
-            const data = event.data;
-
-            // Check if the hihaho player is ready
-            if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_ready') {
-                if (!data.triggerData.supportsFullscreen) {
-                    // Send a message to enable custom fullscreen handling
-                    iframe.contentWindow.postMessage({ type: 'api_fullscreen_event' }, '*');
-                }
-            }
-            // Check for enter fullscreen event
-            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_enter_fullscreen') {
-                enterFullScreen();
-            }
-            // Check for exit fullscreen event
-            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_exit_fullscreen') {
-                exitFullScreen();
-            }
-        }, false);
-    </script>
+    <h1>埋め込まれた動画</h1>
+    <iframe src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" width="640" height="360" frameborder="0" allowfullscreen></iframe>
 </body>
 </html>
