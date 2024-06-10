@@ -43,6 +43,7 @@
         const videoContainer = document.getElementById('video-container');
         const iframe = document.getElementById('hihaho-video');
 
+        // Event listener for messages from the iframe
         window.addEventListener('message', (event) => {
             const data = event.data;
 
@@ -75,6 +76,17 @@
             videoContainer.style.display = 'flex';
             videoContainer.style.justifyContent = 'center';
             videoContainer.style.alignItems = 'center';
+
+            // Request fullscreen on page load
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
+                videoContainer.mozRequestFullScreen();
+            } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
+                videoContainer.msRequestFullscreen();
+            }
         }
 
         // Function to simulate exiting full screen
@@ -86,6 +98,21 @@
             videoContainer.style.zIndex = '';
             videoContainer.style.backgroundColor = '';
             videoContainer.style.display = 'block';
+
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.msExitFullscreen();
+            }
+        }
+
+        // Automatically enter fullscreen when the page loads
+        window.onload = function() {
+            enterFullScreen();
         }
     </script>
 </body>
