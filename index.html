@@ -57,7 +57,7 @@
         <iframe id="hihaho-video" src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" allow="autoplay; fullscreen; clipboard-read; clipboard-write" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>
     </div>
     <button class="control-button fullscreen-button" onclick="toggleFullscreen()">Fullscreen</button>
-    <button class="control-button close-button" onclick="closeFullscreen()">Close</button>
+    <button class="control-button close-button" onclick="closeTab()">Close</button>
 
     <script>
         const videoContainer = document.getElementById('video-container');
@@ -98,9 +98,9 @@
             }
         }
 
-        // Function to close fullscreen mode
-        function closeFullscreen() {
-            exitFullScreen();
+        // Function to close the tab
+        function closeTab() {
+            window.close();
         }
 
         // Automatically enter fullscreen when the page loads
@@ -128,6 +128,17 @@
                 exitFullScreen();
             }
         }, false);
+
+        // Handle orientation changes to ensure the video remains responsive
+        window.addEventListener('orientationchange', () => {
+            if (window.orientation === 90 || window.orientation === -90) {
+                videoContainer.style.width = '100vw';
+                videoContainer.style.height = '100vh';
+            } else {
+                videoContainer.style.width = '100vw';
+                videoContainer.style.height = '100vh';
+            }
+        });
     </script>
 </body>
 </html>
