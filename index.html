@@ -32,50 +32,61 @@
             height: 100%;
             border: none;
         }
-        .fullscreen-button {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            z-index: 10000;
-            background-color: #444;
-            border: none;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
     </style>
 </head>
 <body>
     <div id="video-container">
-        <iframe src="https://player.hihaho.com/embed/1958525c-ab0e-48b4-a785-d387b6247ced?api=true" allow="autoplay; fullscreen; clipboard-read; clipboard-write" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>
+        <iframe id="hihaho-video" src="https://player.hihaho.com/embed/1958525c-ab0e-48b4-a785-d387b6247ced?api=true" allow="autoplay; fullscreen; clipboard-read; clipboard-write" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>
     </div>
-    <button class="fullscreen-button" onclick="toggleFullscreen()">Pantalla completa</button>
 
     <script>
-        function toggleFullscreen() {
-            const videoContainer = document.getElementById('video-container');
-            if (!document.fullscreenElement) {
-                if (videoContainer.requestFullscreen) {
-                    videoContainer.requestFullscreen();
-                } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
-                    videoContainer.mozRequestFullScreen();
-                } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                    videoContainer.webkitRequestFullscreen();
-                } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
-                    videoContainer.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) { /* Firefox */
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE/Edge */
-                    document.msExitFullscreen();
+        // Ensure the iframe handles the fullscreen mode
+        const videoContainer = document.getElementById('video-container');
+        const iframe = document.getElementById('hihaho-video');
+
+        window.addEventListener('message', (event) => {
+            const data = event.data;
+
+            // Check if the hihaho player is ready
+            if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_ready') {
+                if (!data.triggerData.supportsFullscreen) {
+                    // Send a message to enable custom fullscreen handling
+                    iframe.contentWindow.postMessage({ type: 'api_fullscreen_event' }, '*');
                 }
             }
+            // Check for enter fullscreen event
+            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_enter_fullscreen') {
+                enterFullScreen();
+            }
+            // Check for exit fullscreen event
+            else if (data.type === 'documentTrigger' && data.triggerName === 'hihaho_exit_fullscreen') {
+                exitFullScreen();
+            }
+        }, false);
+
+        // Function to simulate entering full screen
+        function enterFullScreen() {
+            videoContainer.style.position = 'fixed';
+            videoContainer.style.top = '0';
+            videoContainer.style.left = '0';
+            videoContainer.style.width = '100vw';
+            videoContainer.style.height = '100vh';
+            videoContainer.style.zIndex = '9999';
+            videoContainer.style.backgroundColor = '#000';
+            videoContainer.style.display = 'flex';
+            videoContainer.style.justifyContent = 'center';
+            videoContainer.style.alignItems = 'center';
+        }
+
+        // Function to simulate exiting full screen
+        function exitFullScreen() {
+            videoContainer.style.position = 'relative';
+            videoContainer.style.width = '100%';
+            videoContainer.style.paddingBottom = '56.25%';
+            videoContainer.style.height = '0px';
+            videoContainer.style.zIndex = '';
+            videoContainer.style.backgroundColor = '';
+            videoContainer.style.display = 'block';
         }
     </script>
 </body>
