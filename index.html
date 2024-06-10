@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>動画埋め込み</title>
+    <title>カスタムタイトル - 動画埋め込み</title>
+    <style>
+        .video-container {
+            position: relative !important;
+            padding-bottom: 56.25% !important;
+            height: 0px !important;
+            overflow: hidden !important;
+            max-width: 100% !important;
+        }
+        .video-container iframe {
+            position: absolute !important;
+            top: 0px !important;
+            left: 0px !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
 </head>
 <body>
     <h1>埋め込まれた動画</h1>
-    <iframe src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+    <div class="video-container">
+        <iframe src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
+    </div>
 </body>
 </html>
