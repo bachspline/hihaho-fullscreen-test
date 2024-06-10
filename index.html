@@ -32,16 +32,81 @@
             height: 100%;
             border: none;
         }
+        .control-button {
+            position: fixed;
+            z-index: 10000;
+            background-color: #444;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .fullscreen-button {
+            bottom: 10px;
+            right: 10px;
+        }
+        .close-button {
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="video-container">
         <iframe id="hihaho-video" src="https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true" allow="autoplay; fullscreen; clipboard-read; clipboard-write" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>
     </div>
+    <button class="control-button fullscreen-button" onclick="toggleFullscreen()">Fullscreen</button>
+    <button class="control-button close-button" onclick="closeFullscreen()">Close</button>
 
     <script>
         const videoContainer = document.getElementById('video-container');
         const iframe = document.getElementById('hihaho-video');
+
+        // Function to toggle fullscreen mode
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                enterFullScreen();
+            } else {
+                exitFullScreen();
+            }
+        }
+
+        // Function to simulate entering full screen
+        function enterFullScreen() {
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
+                videoContainer.mozRequestFullScreen();
+            } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
+                videoContainer.msRequestFullscreen();
+            }
+        }
+
+        // Function to simulate exiting full screen
+        function exitFullScreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.msExitFullscreen();
+            }
+        }
+
+        // Function to close fullscreen mode
+        function closeFullscreen() {
+            exitFullScreen();
+        }
+
+        // Automatically enter fullscreen when the page loads
+        window.onload = function() {
+            enterFullScreen();
+        }
 
         // Event listener for messages from the iframe
         window.addEventListener('message', (event) => {
@@ -63,57 +128,6 @@
                 exitFullScreen();
             }
         }, false);
-
-        // Function to simulate entering full screen
-        function enterFullScreen() {
-            videoContainer.style.position = 'fixed';
-            videoContainer.style.top = '0';
-            videoContainer.style.left = '0';
-            videoContainer.style.width = '100vw';
-            videoContainer.style.height = '100vh';
-            videoContainer.style.zIndex = '9999';
-            videoContainer.style.backgroundColor = '#000';
-            videoContainer.style.display = 'flex';
-            videoContainer.style.justifyContent = 'center';
-            videoContainer.style.alignItems = 'center';
-
-            // Request fullscreen on page load
-            if (videoContainer.requestFullscreen) {
-                videoContainer.requestFullscreen();
-            } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
-                videoContainer.mozRequestFullScreen();
-            } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                videoContainer.webkitRequestFullscreen();
-            } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
-                videoContainer.msRequestFullscreen();
-            }
-        }
-
-        // Function to simulate exiting full screen
-        function exitFullScreen() {
-            videoContainer.style.position = 'relative';
-            videoContainer.style.width = '100%';
-            videoContainer.style.paddingBottom = '56.25%';
-            videoContainer.style.height = '0px';
-            videoContainer.style.zIndex = '';
-            videoContainer.style.backgroundColor = '';
-            videoContainer.style.display = 'block';
-
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) { /* Firefox */
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE/Edge */
-                document.msExitFullscreen();
-            }
-        }
-
-        // Automatically enter fullscreen when the page loads
-        window.onload = function() {
-            enterFullScreen();
-        }
     </script>
 </body>
 </html>
