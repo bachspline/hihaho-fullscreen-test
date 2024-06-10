@@ -41,16 +41,8 @@
 
     <script>
         function openFullscreen() {
-            var iframe = document.getElementById('video-iframe');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { // Firefox
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { // IE/Edge
-                iframe.msRequestFullscreen();
-            }
+            var url = 'https://player.hihaho.com/embed/de97a16f-1b37-49bd-bc9b-500b083ae64e?api=true';
+            window.open(url, '_blank');
         }
     </script>
 </body>
